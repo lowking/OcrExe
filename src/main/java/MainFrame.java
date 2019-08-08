@@ -2,6 +2,7 @@ package main.java;
 
 import ch.randelshofer.quaqua.QuaquaManager;
 import com.alee.laf.WebLookAndFeel;
+import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -19,6 +20,7 @@ import main.java.util.OcrUtil;
  */
 public class MainFrame extends JFrame {
     public MainFrame() {
+        getContentPane().setBackground(Color.WHITE);
         //设置窗口大小
         setSize(480, 100);
         //设置标题
