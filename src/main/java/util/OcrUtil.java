@@ -1,35 +1,27 @@
-package actions;
+package main.java.util;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import main.java.util.ClipBoardUtil;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 
 /**
  * @Author: htc
- * @Date: 2019/8/7
+ * @Date: 2019/8/8
  */
-public class DoOcrAction extends JFrame implements ActionListener {
-    ITesseract instance;
+public class OcrUtil {
 
-    private final String datapath = "src/main/resources/tessdata";
+    public static ITesseract instance;
 
-    JLabel snArea;
+    private static final String datapath = "src/main/resources/tessdata";
 
-    public DoOcrAction(JLabel snArea) {
-        this.snArea = snArea;
+    public static void init() {
         instance = new Tesseract();
         instance.setDatapath(new File(datapath).getPath());
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        File img = new File("c:/1.jpg");
+    public static void showOcrResult(File img, JLabel snArea){
         if (!img.exists()) {
             snArea.setText("未找到要识别的文件");
         } else {
