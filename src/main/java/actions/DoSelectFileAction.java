@@ -1,19 +1,14 @@
 package main.java.actions;
 
-import static main.java.util.OcrUtil.instance;
-
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.UIManager;
 import main.java.MainFrame;
-import main.java.util.ClipBoardUtil;
+import main.java.filefilter.PicFilter;
 import main.java.util.OcrUtil;
-import net.sourceforge.tess4j.TesseractException;
 
 /**
  * @Author: htc
@@ -33,6 +28,8 @@ public class DoSelectFileAction extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JFileChooser jfc = new JFileChooser();
+        //设置文件类型过滤
+        jfc.setFileFilter(new PicFilter());
         //设置默认目录
         jfc.setCurrentDirectory(new File(defaultDirectory));
         int flag = jfc.showOpenDialog(mainFrame);

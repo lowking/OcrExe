@@ -1,13 +1,16 @@
 package main.java;
 
-import javax.swing.UIManager;
-import main.java.actions.DoOcrAction;
-import main.java.actions.DoSelectFileAction;
+import ch.randelshofer.quaqua.QuaquaManager;
+import com.alee.laf.WebLookAndFeel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
+import main.java.actions.DoOcrAction;
+import main.java.actions.DoSelectFileAction;
 import main.java.util.OcrUtil;
 
 /**
@@ -38,9 +41,48 @@ public class MainFrame extends JFrame {
         snArea.setBounds(10, 10, 370, 45);
 
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            String theme = null;
+            boolean isSetBySelf = true;
+            if (args.length > 0) {
+                switch (args[0]) {
+                    case "mac":
+                        theme = QuaquaManager.getLookAndFeelClassName();
+                        break;
+                    case "metal":
+                        theme = "javax.swing.plaf.metal.MetalLookAndFeel";
+                        break;
+                    case "nimbus":
+                        theme = "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel";
+                        break;
+                    case "weblaf":
+                        theme = WebLookAndFeel.class.getCanonicalName();;
+                        break;
+                    case "beautyeye":
+                        try {
+                            isSetBySelf = false;
+                            org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
+                        } catch (Exception e) {
+                            theme = UIManager.getSystemLookAndFeelClassName();
+                        }
+                        break;
+                    default:
+                        theme = UIManager.getSystemLookAndFeelClassName();
+                        break;
+                }
+            } else {
+                theme = UIManager.getSystemLookAndFeelClassName();
+            }
+            if (isSetBySelf) {
+                UIManager.setLookAndFeel(theme);
+            }
+            JFrame.setDefaultLookAndFeelDecorated(true);
+            JDialog.setDefaultLookAndFeelDecorated(true);
         } catch (Exception e1) {
-            snArea.setText("初始化样式失败");
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception e2) {
+                snArea.setText("初始化样式失败");
+            }
         }
 
         //添加识别按钮
