@@ -1,10 +1,12 @@
 package main.java.util;
 
-import java.io.File;
-import javax.swing.JLabel;
+import main.java.global.GlobalHotKey;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
+
+import javax.swing.*;
+import java.io.File;
 
 /**
  * @Author: htc
@@ -28,6 +30,24 @@ public class OcrUtil {
             String result;
             try {
                 result = instance.doOCR(img);
+                ClipBoardUtil.setSysClipboardText(result);
+                String labelString =
+                        "<html><body>" + result.replaceAll("\\r\\n|\\n", "<br>") + "<body></html>";
+                snArea.setText(labelString);
+            } catch (TesseractException e1) {
+                e1.printStackTrace();
+                snArea.setText("识别错误!");
+            }
+        }
+    }
+
+    public static void showOcrResultForImg(GlobalHotKey.Images images, JLabel snArea) {
+        if (images == null) {
+            snArea.setText("未获取到截图,请重新截图");
+        } else {
+            String result;
+            try {
+                result = instance.doOCR(images.getBufferedImg());
                 ClipBoardUtil.setSysClipboardText(result);
                 String labelString =
                         "<html><body>" + result.replaceAll("\\r\\n|\\n", "<br>") + "<body></html>";

@@ -2,17 +2,12 @@ package main.java;
 
 import ch.randelshofer.quaqua.QuaquaManager;
 import com.alee.laf.WebLookAndFeel;
-import java.awt.Color;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.UIManager;
-import javax.swing.WindowConstants;
 import main.java.actions.DoOcrAction;
 import main.java.actions.DoSelectFileAction;
 import main.java.util.OcrUtil;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * @Author: htc
@@ -22,7 +17,7 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         getContentPane().setBackground(Color.WHITE);
         //设置窗口大小
-        setSize(480, 100);
+        setSize(560, 100);
         //设置标题
         setTitle("单号识别");
         ImageIcon imageIcon = new ImageIcon("src/main/resources/icon2.jpg");
@@ -97,9 +92,15 @@ public class MainFrame extends JFrame {
         mainFrame.add(doSelectFile);
         doSelectFile.setBounds(380, 10, 70, 45);
 
+        //添加文件选择器按钮
+        JButton cutScreenBtn = new JButton("截图");
+        mainFrame.add(cutScreenBtn);
+        cutScreenBtn.setBounds(460, 10, 70, 45);
+
         //按钮添加点击事件
         doOcrBtn.addActionListener(new DoOcrAction(snArea));
         doSelectFile.addActionListener(new DoSelectFileAction(mainFrame, snArea));
+        cutScreenBtn.addActionListener(new ScreenShot.ShotE(snArea));
 
         //显示窗口
         mainFrame.setVisible(true);
