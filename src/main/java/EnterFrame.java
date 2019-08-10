@@ -17,7 +17,7 @@ import java.awt.*;
  */
 public class EnterFrame extends JFrame implements HotkeyListener {
     private static final int shotHotKey = 88;
-    private JButton cutScreenBtn = new JButton("截图");
+    private JButton cutScreenBtn;
 
     EnterFrame(String[] args) {
         getContentPane().setBackground(Color.WHITE);
@@ -94,6 +94,7 @@ public class EnterFrame extends JFrame implements HotkeyListener {
         doSelectFile.setBounds(380, 10, 70, 45);
 
         //添加文件选择器按钮
+        cutScreenBtn = new JButton("截图");
         add(cutScreenBtn);
         cutScreenBtn.setBounds(460, 10, 70, 45);
 

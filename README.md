@@ -8,7 +8,7 @@
 > - 可直接启动MainFrame.main()
 > - 如果想打包成exe,可以使用/src/main/resources/ocr.exe4j配置打包(本人使用exe4j,可自行选择打包工具)
 > - 支持启动参数选择外观主题  
-> - 支持截图识别(之后加入快捷键截图识别)  
+> - 支持截图识别(支持全局快捷键,默认Ctrl+Alt+E)  
 >   目前支持以下几种参数:  
 >   - mac: mac主题风格,使用quaqua.jar  
 >   - metal: jdk自带  
