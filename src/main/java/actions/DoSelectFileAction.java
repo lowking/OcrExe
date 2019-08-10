@@ -1,14 +1,13 @@
 package main.java.actions;
 
+import main.java.EnterFrame;
+import main.java.filefilter.PicFilter;
+import main.java.util.OcrUtil;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import main.java.MainFrame;
-import main.java.filefilter.PicFilter;
-import main.java.util.OcrUtil;
 
 /**
  * @Author: htc
@@ -16,12 +15,12 @@ import main.java.util.OcrUtil;
  */
 public class DoSelectFileAction extends JFrame implements ActionListener {
 
-    private final MainFrame mainFrame;
+    private final EnterFrame EnterFrame;
     private final JLabel snArea;
     private String defaultDirectory = "c:/";
 
-    public DoSelectFileAction(MainFrame mainFrame, JLabel snArea) {
-        this.mainFrame = mainFrame;
+    public DoSelectFileAction(EnterFrame EnterFrame, JLabel snArea) {
+        this.EnterFrame = EnterFrame;
         this.snArea = snArea;
     }
 
@@ -32,7 +31,7 @@ public class DoSelectFileAction extends JFrame implements ActionListener {
         jfc.setFileFilter(new PicFilter());
         //设置默认目录
         jfc.setCurrentDirectory(new File(defaultDirectory));
-        int flag = jfc.showOpenDialog(mainFrame);
+        int flag = jfc.showOpenDialog(EnterFrame);
         //若选择了文件，则打印选择了什么文件
         String fileName;
         if (flag == JFileChooser.APPROVE_OPTION) {

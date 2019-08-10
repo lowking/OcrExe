@@ -48,7 +48,7 @@ public class OcrUtil {
             String result;
             try {
                 result = instance.doOCR(images.getBufferedImg());
-                ClipBoardUtil.setSysClipboardText(result);
+                ClipBoardUtil.setSysClipboardText(result.trim());
                 String labelString =
                         "<html><body>" + result.replaceAll("\\r\\n|\\n", "<br>") + "<body></html>";
                 snArea.setText(labelString);

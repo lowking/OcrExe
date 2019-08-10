@@ -47,20 +47,6 @@ public class GlobalHotKey implements HotkeyListener {
     }
 
     public void onHotKey(int key) {
-        switch (key) {
-            case shotHotKey:
-                if (shotBusy) return;
-                shotBusy = true;
-                registerESC();//注册窗体全局热键
-                try {
-                    shotProcess(this.snArea);
-                } catch (AWTException e) {
-                    e.printStackTrace();
-                }
-                break;
-            default:
-                System.exit(0);
-        }
 
     }
 
