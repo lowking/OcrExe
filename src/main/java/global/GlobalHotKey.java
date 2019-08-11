@@ -2,6 +2,7 @@ package main.java.global;
 
 import com.melloware.jintellitype.HotkeyListener;
 import com.melloware.jintellitype.JIntellitype;
+import main.java.EnterFrame;
 import main.java.util.OcrUtil;
 
 import javax.swing.*;
@@ -19,8 +20,6 @@ public class GlobalHotKey implements HotkeyListener {
     public static final int shotHotKey = 88;
     //防止和全局热键冲突。
     private volatile boolean enterBusy = false;
-    //防止重复截图。
-    private volatile boolean shotBusy = false;
     //第一次拖拽完成后，需要进行处理，这时候需要重新利用click,drag和release函数。
     private volatile boolean isProcess = false;
     /**
@@ -226,15 +225,21 @@ public class GlobalHotKey implements HotkeyListener {
      **/
     private void pastePic() {
         /*将图片复制到剪贴板,参考链接:http://blog.csdn.net/u010982856/article/details/44747029**/
-        Images images = new Images((new ImageIcon(clipArea())).getImage());
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(images, null);
-        OcrUtil.showOcrResultForImg(images, snArea);
+        Images images;
+        try {
+            images = new Images((new ImageIcon(clipArea())).getImage());
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(images, null);
+            OcrUtil.showOcrResultForImg(images, snArea);
+        } catch (Exception e) {
+            snArea.setText("截屏区域太小了");
+        }
+
         clean();
     }
 
     private void clean() {
         jf.dispose();
-        shotBusy = false;
+        EnterFrame.shotBusy = false;
         isProcess = false;
         start = new Point(0, 0);
         end = new Point(0, 0);

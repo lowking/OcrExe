@@ -16,6 +16,8 @@ import java.awt.*;
  * @Date: 2019/8/7
  */
 public class EnterFrame extends JFrame implements HotkeyListener {
+    //防止重复截图。
+    public static volatile boolean shotBusy = false;
     private static final int shotHotKey = 88;
     private JButton cutScreenBtn;
 
@@ -116,7 +118,8 @@ public class EnterFrame extends JFrame implements HotkeyListener {
     @Override
     public void onHotKey(int key) {
         //ctrl+alt+e
-        if (88 == key) {
+        if (88 == key && !shotBusy) {
+            shotBusy = true;
             cutScreenBtn.doClick();
         }
     }
