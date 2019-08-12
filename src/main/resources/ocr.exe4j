@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <exe4j version="6.0.2" transformSequenceNumber="2">
-  <directoryPresets config="D:/" />
+  <directoryPresets config="D:/htcws-git/OcrExe/src/main/resources/libs" />
   <application name="OcrExe" distributionSourceDir="D:/OcrExe">
     <languages>
       <principalLanguage id="en" customLocalizationFile="" />
@@ -22,10 +22,18 @@
     </searchSequence>
     <classPath>
       <archive location="D:/htcws-git/OcrExe/out/artifacts/OcrExe_jar/OcrExe.jar" failOnError="false" />
-      <archive location="D:/commons-io-2.5.jar" failOnError="false" />
-      <archive location="D:/weblaf-demo-1.2.9-jar-with-dependencies.jar" failOnError="false" />
-      <archive location="D:/quaqua-7.3.4.jar" failOnError="false" />
-      <archive location="D:/SwingSets3(BeautyEyeLNFDemo).jar" failOnError="false" />
+      <archive location="D:/htcws-git/OcrExe/src/main/resources/libs/commons-io-2.5.jar" failOnError="false" />
+      <archive location="D:/htcws-git/OcrExe/src/main/resources/libs/jai-imageio-core-1.4.0.jar" failOnError="false" />
+      <archive location="D:/htcws-git/OcrExe/src/main/resources/libs/jintellitype-1.3.9.jar" failOnError="false" />
+      <archive location="D:/htcws-git/OcrExe/src/main/resources/libs/jna-5.2.0.jar" failOnError="false" />
+      <archive location="D:/htcws-git/OcrExe/src/main/resources/libs/jna-platform-5.2.0.jar" failOnError="false" />
+      <archive location="D:/htcws-git/OcrExe/src/main/resources/libs/jul-to-slf4j-1.7.25.jar" failOnError="false" />
+      <archive location="D:/htcws-git/OcrExe/src/main/resources/libs/lept4j-1.11.0.jar" failOnError="false" />
+      <archive location="D:/htcws-git/OcrExe/src/main/resources/libs/quaqua-7.3.4.jar" failOnError="false" />
+      <archive location="D:/htcws-git/OcrExe/src/main/resources/libs/slf4j-api-1.7.25.jar" failOnError="false" />
+      <archive location="D:/htcws-git/OcrExe/src/main/resources/libs/SwingSets3(BeautyEyeLNFDemo).jar" failOnError="false" />
+      <archive location="D:/htcws-git/OcrExe/src/main/resources/libs/tess4j-4.4.0-SNAPSHOT.jar" failOnError="false" />
+      <archive location="D:/htcws-git/OcrExe/src/main/resources/libs/weblaf-demo-1.2.9-jar-with-dependencies.jar" failOnError="false" />
     </classPath>
     <modulePath />
     <nativeLibraryDirectories />
