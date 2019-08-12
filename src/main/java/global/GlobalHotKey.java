@@ -1,20 +1,49 @@
 package main.java.global;
 
+import static main.java.util.QrCodeUtil.getQrCode;
+
+import com.google.zxing.NotFoundException;
 import com.melloware.jintellitype.HotkeyListener;
 import com.melloware.jintellitype.JIntellitype;
-import main.java.EnterFrame;
-import main.java.util.OcrUtil;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.AWTEvent;
+import java.awt.AWTException;
+import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Composite;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.HeadlessException;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Stroke;
+import java.awt.Toolkit;
+import java.awt.Transparency;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
+import main.java.EnterFrame;
+import main.java.util.ClipBoardUtil;
+import main.java.util.OcrUtil;
+import main.java.util.QrCodeUtil;
+import main.java.util.StringUtil;
 
 public class GlobalHotKey implements HotkeyListener {
     public static final int shotHotKey = 88;
@@ -45,6 +74,7 @@ public class GlobalHotKey implements HotkeyListener {
     public GlobalHotKey() {
     }
 
+    @Override
     public void onHotKey(int key) {
 
     }
@@ -76,7 +106,7 @@ public class GlobalHotKey implements HotkeyListener {
     }
 
     private JFrame jf;
-    private myContentPane jp;
+    private MyContentPane jp;
     private BufferedImage bi;
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -86,7 +116,7 @@ public class GlobalHotKey implements HotkeyListener {
         jf.setUndecorated(true);
         jf.setBounds(0, 0, screenSize.width, screenSize.height);
         jf.setAlwaysOnTop(true);
-        jp = new myContentPane(this);
+        jp = new MyContentPane(this);
         jp.setOpaque(false);
         jp.setLayout(null);
         Robot rb;
@@ -98,7 +128,7 @@ public class GlobalHotKey implements HotkeyListener {
         bi = rb.createScreenCapture(new Rectangle(screenSize));
         drawMouse(bi);
         img = new ImageIcon(bi);
-        mouseEvent e = new mouseEvent(this);
+        MouseEvent e = new MouseEvent(this);
         jp.addMouseListener(e);
         jp.addMouseMotionListener(e);
         jf.add(jp);
@@ -117,10 +147,10 @@ public class GlobalHotKey implements HotkeyListener {
 
     private ImageIcon img;
 
-    private class myContentPane extends JPanel {
+    private class MyContentPane extends JPanel {
         GlobalHotKey ek;
 
-        myContentPane(GlobalHotKey ek) {
+        MyContentPane(GlobalHotKey ek) {
             this.ek = ek;
         }
 
@@ -149,8 +179,9 @@ public class GlobalHotKey implements HotkeyListener {
             /*
              * 设置透明度 https://wenku.baidu.com/view/d90f110d227916888486d7ee.html
              */
-            if (img != null)
+            if (img != null) {
                 g.drawImage(img.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
             AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
             Composite old = ((Graphics2D) g).getComposite();
             ((Graphics2D) g).setComposite(ac);
@@ -229,8 +260,30 @@ public class GlobalHotKey implements HotkeyListener {
         try {
             images = new Images((new ImageIcon(clipArea())).getImage());
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(images, null);
-            OcrUtil.showOcrResultForImg(images, snArea);
+            String text = OcrUtil.showOcrResultForImg(images, snArea);
+            if (text.startsWith("QR")) {
+                //显示识别出来的文字生成的二维码
+                getQrCode(text);
+                //去除空格之类的
+                text = StringUtil.replaceBlank(text).substring(2);
+                ImageIcon icon = new ImageIcon(getQrCode(text));
+                icon = new ImageIcon(icon.getImage().getScaledInstance(300, 300, Image.SCALE_DEFAULT));
+                snArea.setIcon(icon);
+                snArea.setText("");
+                snArea.setHorizontalAlignment(SwingConstants.CENTER);
+                snArea.setBounds(0, 53, 280, 280);
+            } else {
+                //如果图片是二维码,复制其内容
+                try {
+                    text = QrCodeUtil.getString(images.getBufferedImg());
+                    ClipBoardUtil.setSysClipboardText(text);
+                    snArea.setText(text);
+                    snArea.setIcon(null);
+                } catch (NotFoundException ignored) {
+                }
+            }
         } catch (Exception e) {
+            snArea.setIcon(null);
             snArea.setText("截屏区域太小了");
         }
 
@@ -245,14 +298,15 @@ public class GlobalHotKey implements HotkeyListener {
         end = new Point(0, 0);
     }
 
-    private class mouseEvent extends MouseAdapter {
+    private class MouseEvent extends MouseAdapter {
         GlobalHotKey ss;
 
-        mouseEvent(GlobalHotKey screenShot) {
+        MouseEvent(GlobalHotKey screenShot) {
             this.ss = screenShot;
         }
 
-        public void mousePressed(MouseEvent e) {
+        @Override
+        public void mousePressed(java.awt.event.MouseEvent e) {
             if (isProcess) {
                 /*在处理状态下press时，记录press的点，作为起点。*/
                 prePos = e.getPoint();
@@ -263,7 +317,7 @@ public class GlobalHotKey implements HotkeyListener {
             }
         }
 
-        private void pressPro(MouseEvent e) {
+        private void pressPro(java.awt.event.MouseEvent e) {
             isSelExist();
             start = e.getPoint();
             end = new Point(start.x, start.y);
@@ -271,7 +325,8 @@ public class GlobalHotKey implements HotkeyListener {
             ss.jp.updateUI();
         }
 
-        public void mouseReleased(MouseEvent e) {
+        @Override
+        public void mouseReleased(java.awt.event.MouseEvent e) {
             if (isProcess) {
                 /*修正在反方向拖动时的区域修正及更新面板**/
                 correctDir();
@@ -280,7 +335,7 @@ public class GlobalHotKey implements HotkeyListener {
             }
         }
 
-        private void releaseProcess(MouseEvent e) {
+        private void releaseProcess(java.awt.event.MouseEvent e) {
             /* 如果只有点击没有拖拽，就进行窗体检测。*/
             correctDir();
             isSelExist();
@@ -297,7 +352,8 @@ public class GlobalHotKey implements HotkeyListener {
 
         volatile boolean isDrag = false;
 
-        public void mouseDragged(MouseEvent e) {
+        @Override
+        public void mouseDragged(java.awt.event.MouseEvent e) {
             if (isProcess) {
                 /* 判断拖拽拉伸类型，然后处理。*/
                 dragPro(e);
@@ -309,7 +365,7 @@ public class GlobalHotKey implements HotkeyListener {
             }
         }
 
-        private void dragPro(MouseEvent e) {
+        private void dragPro(java.awt.event.MouseEvent e) {
             Point curPos = e.getPoint();
             switch (dragType) {
                 case DRAG_MOVE:
@@ -384,7 +440,7 @@ public class GlobalHotKey implements HotkeyListener {
         }
 
         @Override
-        public void mouseMoved(MouseEvent e) {
+        public void mouseMoved(java.awt.event.MouseEvent e) {
             /*鼠标移动自动判断当前哪个矩形中**/
             if (isProcess) {
                 Point p = e.getPoint();
@@ -433,20 +489,23 @@ public class GlobalHotKey implements HotkeyListener {
 
 
     public class Images implements Transferable {
-        private Image image; //得到图片或者图片流
+        private Image image;
 
         public Images(Image image) {
             this.image = image;
         }
 
+        @Override
         public DataFlavor[] getTransferDataFlavors() {
             return new DataFlavor[]{DataFlavor.imageFlavor};
         }
 
+        @Override
         public boolean isDataFlavorSupported(DataFlavor flavor) {
             return DataFlavor.imageFlavor.equals(flavor);
         }
 
+        @Override
         public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
             if (!DataFlavor.imageFlavor.equals(flavor)) {
                 throw new UnsupportedFlavorException(flavor);
@@ -467,7 +526,7 @@ public class GlobalHotKey implements HotkeyListener {
                 GraphicsConfiguration gc = gs.getDefaultConfiguration();
                 bimage = gc.createCompatibleImage(
                         image.getWidth(null), image.getHeight(null), transparency);
-            } catch (HeadlessException e) {
+            } catch (HeadlessException ignored) {
             }
 
             if (bimage == null) {

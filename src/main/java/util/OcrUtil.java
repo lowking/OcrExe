@@ -41,14 +41,14 @@ public class OcrUtil {
         }
     }
 
-    public static void showOcrResultForImg(GlobalHotKey.Images images, JLabel snArea) {
+    public static String showOcrResultForImg(GlobalHotKey.Images images, JLabel snArea) {
+        String result = "";
         if (images == null) {
             snArea.setText("未获取到截图,请重新截图");
         } else {
-            String result;
             try {
-                result = instance.doOCR(images.getBufferedImg());
-                ClipBoardUtil.setSysClipboardText(result.trim());
+                result = instance.doOCR(images.getBufferedImg()).trim();
+                ClipBoardUtil.setSysClipboardText(result);
                 String labelString =
                         "<html><body>" + result.replaceAll("\\r\\n|\\n", "<br>") + "<body></html>";
                 snArea.setText(labelString);
@@ -57,5 +57,6 @@ public class OcrUtil {
                 snArea.setText("识别错误!");
             }
         }
+        return result;
     }
 }

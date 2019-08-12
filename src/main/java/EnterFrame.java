@@ -24,7 +24,7 @@ public class EnterFrame extends JFrame implements HotkeyListener {
     EnterFrame(String[] args) {
         getContentPane().setBackground(Color.WHITE);
         //设置窗口大小
-        setSize(560, 100);
+        setSize(295, 370);
         //设置标题
         setTitle("单号识别");
         ImageIcon imageIcon = new ImageIcon("src/main/resources/icon2.jpg");
@@ -38,7 +38,7 @@ public class EnterFrame extends JFrame implements HotkeyListener {
         //添加label显示文本
         JLabel snArea = new JLabel("");
         add(snArea);
-        snArea.setBounds(10, 10, 370, 45);
+        snArea.setBounds(0, 53, 280, 280);
 
         try {
             String theme = null;
@@ -88,17 +88,17 @@ public class EnterFrame extends JFrame implements HotkeyListener {
         //添加识别按钮
         JButton doOcrBtn = new JButton("识别并复制");
         add(doOcrBtn);
-        doOcrBtn.setBounds(270, 10, 100, 45);
+        doOcrBtn.setBounds(10, 10, 100, 45);
 
         //添加文件选择器按钮
         JButton doSelectFile = new JButton("选择");
         add(doSelectFile);
-        doSelectFile.setBounds(380, 10, 70, 45);
+        doSelectFile.setBounds(120, 10, 70, 45);
 
         //添加文件选择器按钮
         cutScreenBtn = new JButton("截图");
         add(cutScreenBtn);
-        cutScreenBtn.setBounds(460, 10, 70, 45);
+        cutScreenBtn.setBounds(200, 10, 70, 45);
 
         //按钮添加点击事件
         doOcrBtn.addActionListener(new DoOcrAction(snArea));
@@ -113,6 +113,11 @@ public class EnterFrame extends JFrame implements HotkeyListener {
 
         //初始化ocr实例
         OcrUtil.init();
+        
+        //初始化参数
+        //这个是强制缩放到与组件(Label)大小相同
+        //icon=new ImageIcon(icon.getImage().getScaledInstance(getWidth(), getHeight()-25, Image.SCALE_DEFAULT));
+        //这个是按等比缩放
     }
 
     @Override
