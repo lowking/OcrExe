@@ -50,7 +50,7 @@ public class StringUtil {
             }
             builder.append(chars, i, j - 1).append("<br/>");
             i = j - 1;
-            j = 1;
+            j = 0;
         }
         builder.append("</html>");
         return builder.toString();
