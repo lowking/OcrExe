@@ -1,9 +1,11 @@
 package main.java.util;
 
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 /**
  * @Author: htc
@@ -37,22 +39,31 @@ public class StringUtil {
      * @return
      */
     public static String getWarpString(JLabel snArea, String str) {
-        StringBuilder builder = new StringBuilder("<html>");
+        snArea.setText("处理中...");
+        StringBuffer builder = new StringBuffer("<html>");
         char[] chars = str.toCharArray();
         FontMetrics fontMetrics = snArea.getFontMetrics(snArea.getFont());
-        for (int i = 0, j = 1;; j++) {
-            if (fontMetrics.charsWidth(chars, i, j) < snArea.getWidth()) {
-                if (i + j < chars.length) {
+        for (int beginIndex = 0, limit = 1;; limit++) {
+            if (fontMetrics.charsWidth(chars, beginIndex, limit) < snArea.getWidth()) {
+                if (beginIndex + limit < chars.length) {
                     continue;
                 }
-                builder.append(chars, i, j);
+                builder.append(chars, beginIndex, limit);
                 break;
             }
-            builder.append(chars, i, j - 1).append("<br/>");
-            i = j - 1;
-            j = 0;
+            builder.append(chars, beginIndex, limit - 1).append("<br/>");
+            beginIndex += limit - 1;
+            limit = 1;
         }
         builder.append("</html>");
         return builder.toString();
+    }
+
+    public static void main(String[] args) {
+        JLabel snArea = new JLabel("");
+        snArea.setBounds(0, 53, 280, 280);
+        snArea.setFont(new Font("",Font.PLAIN,18));
+        snArea.setHorizontalAlignment(SwingConstants.CENTER);
+        System.out.println(getWarpString(new JLabel(), "werwerwerwerwerwerwerwerwerwerwerwerwerwerwerwerwerwer"));
     }
 }
