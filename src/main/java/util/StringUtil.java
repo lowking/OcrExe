@@ -1,7 +1,9 @@
 package main.java.util;
 
+import java.awt.FontMetrics;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JLabel;
 
 /**
  * @Author: htc
@@ -26,5 +28,31 @@ public class StringUtil {
             dest = m.replaceAll("");
         }
         return dest;
+    }
+
+    /**
+     * 根据jlabel自动换行
+     * @param snArea
+     * @param str
+     * @return
+     */
+    public static String getWarpString(JLabel snArea, String str) {
+        StringBuilder builder = new StringBuilder("<html>");
+        char[] chars = str.toCharArray();
+        FontMetrics fontMetrics = snArea.getFontMetrics(snArea.getFont());
+        for (int i = 0, j = 1;; j++) {
+            if (fontMetrics.charsWidth(chars, i, j) < snArea.getWidth()) {
+                if (i + j < chars.length) {
+                    continue;
+                }
+                builder.append(chars, i, j);
+                break;
+            }
+            builder.append(chars, i, j - 1).append("<br/>");
+            i = j - 1;
+            j = 1;
+        }
+        builder.append("</html>");
+        return builder.toString();
     }
 }

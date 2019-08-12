@@ -1,6 +1,7 @@
 package main.java.global;
 
 import static main.java.util.QrCodeUtil.getQrCode;
+import static main.java.util.StringUtil.getWarpString;
 
 import com.google.zxing.NotFoundException;
 import com.melloware.jintellitype.HotkeyListener;
@@ -37,7 +38,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import main.java.EnterFrame;
 import main.java.util.ClipBoardUtil;
@@ -257,31 +257,35 @@ public class GlobalHotKey implements HotkeyListener {
     private void pastePic() {
         /*将图片复制到剪贴板,参考链接:http://blog.csdn.net/u010982856/article/details/44747029**/
         Images images;
+        String text = null;
         try {
             images = new Images((new ImageIcon(clipArea())).getImage());
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(images, null);
-            String text = OcrUtil.showOcrResultForImg(images, snArea);
-            if (text.startsWith("QR")) {
+            text = OcrUtil.showOcrResultForImg(images, snArea);
+            if (text.toUpperCase().startsWith("QR") && text.length() > 2) {
                 //显示识别出来的文字生成的二维码
                 getQrCode(text);
                 //去除空格之类的
                 text = StringUtil.replaceBlank(text).substring(2);
                 ImageIcon icon = new ImageIcon(getQrCode(text));
-                icon = new ImageIcon(icon.getImage().getScaledInstance(300, 300, Image.SCALE_DEFAULT));
+                icon = new ImageIcon(
+                        icon.getImage().getScaledInstance(300, 300, Image.SCALE_DEFAULT));
                 snArea.setIcon(icon);
                 snArea.setText("");
-                snArea.setHorizontalAlignment(SwingConstants.CENTER);
                 snArea.setBounds(0, 53, 280, 280);
             } else {
                 //如果图片是二维码,复制其内容
                 try {
                     text = QrCodeUtil.getString(images.getBufferedImg());
                     ClipBoardUtil.setSysClipboardText(text);
-                    snArea.setText(text);
+                    snArea.setText(getWarpString(snArea, text));
                     snArea.setIcon(null);
                 } catch (NotFoundException ignored) {
+                    snArea.setIcon(null);
                 }
             }
+        } catch (IllegalArgumentException e1) {
+            snArea.setText(text);
         } catch (Exception e) {
             snArea.setIcon(null);
             snArea.setText("截屏区域太小了");

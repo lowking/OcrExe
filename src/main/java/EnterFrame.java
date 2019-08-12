@@ -39,6 +39,8 @@ public class EnterFrame extends JFrame implements HotkeyListener {
         JLabel snArea = new JLabel("");
         add(snArea);
         snArea.setBounds(0, 53, 280, 280);
+        snArea.setFont(new Font("",Font.PLAIN,18));
+        snArea.setHorizontalAlignment(SwingConstants.CENTER);
 
         try {
             String theme = null;
