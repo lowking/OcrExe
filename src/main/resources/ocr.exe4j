@@ -34,6 +34,8 @@
       <archive location="D:/htcws-git/OcrExe/src/main/resources/libs/SwingSets3(BeautyEyeLNFDemo).jar" failOnError="false" />
       <archive location="D:/htcws-git/OcrExe/src/main/resources/libs/tess4j-4.4.0-SNAPSHOT.jar" failOnError="false" />
       <archive location="D:/htcws-git/OcrExe/src/main/resources/libs/weblaf-demo-1.2.9-jar-with-dependencies.jar" failOnError="false" />
+      <archive location="D:/htcws-git/OcrExe/src/main/resources/libs/core-3.4.0.jar" failOnError="false" />
+      <archive location="D:/htcws-git/OcrExe/src/main/resources/libs/javase-3.4.0.jar" failOnError="false" />
     </classPath>
     <modulePath />
     <nativeLibraryDirectories />
