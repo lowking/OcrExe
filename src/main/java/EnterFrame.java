@@ -105,7 +105,7 @@ public class EnterFrame extends JFrame implements HotkeyListener {
         //按钮添加点击事件
         doOcrBtn.addActionListener(new DoOcrAction(snArea));
         doSelectFile.addActionListener(new DoSelectFileAction(this, snArea));
-        cutScreenBtn.addActionListener(new ScreenShot.ShotE(snArea));
+        cutScreenBtn.addActionListener(new ScreenShot.ShotE(this, snArea));
 
         //显示窗口
         setVisible(true);

@@ -70,6 +70,7 @@ public class GlobalHotKey implements HotkeyListener {
     private static final int DRAG_BOTTOMLEFT = 8;
     private static final int DRAG_BOTTOMRIGHT = 9;
     private JLabel snArea;
+    private EnterFrame enterFrame;
 
     public GlobalHotKey() {
     }
@@ -110,8 +111,9 @@ public class GlobalHotKey implements HotkeyListener {
     private BufferedImage bi;
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-    public void shotProcess(JLabel snArea) throws AWTException {
+    public void shotProcess(EnterFrame enterFrame, JLabel snArea) throws AWTException {
         this.snArea = snArea;
+        this.enterFrame = enterFrame;
         jf = new JFrame();
         jf.setUndecorated(true);
         jf.setBounds(0, 0, screenSize.width, screenSize.height);
@@ -273,6 +275,9 @@ public class GlobalHotKey implements HotkeyListener {
                 snArea.setIcon(icon);
                 snArea.setText("");
                 snArea.setBounds(0, 53, 280, 280);
+                //识别成功置顶窗口
+                enterFrame.setAlwaysOnTop(true);
+                enterFrame.setAlwaysOnTop(false);
             } else {
                 //如果图片是二维码,复制其内容
                 try {
