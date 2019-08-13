@@ -22,18 +22,20 @@ public class ScreenShot {
     public static class ShotE implements ActionListener {
         private JLabel snArea;
         private EnterFrame enterFrame;
+        private JTextArea textArea;
         boolean first = false;
 
-        ShotE(EnterFrame enterFrame, JLabel snArea) {
+        ShotE(EnterFrame enterFrame, JLabel snArea, JTextArea textArea) {
             this.snArea = snArea;
             this.enterFrame = enterFrame;
+            this.textArea = textArea;
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
             GlobalHotKey globalHotKey = new GlobalHotKey();
             try {
-                globalHotKey.shotProcess(this.enterFrame, this.snArea);
+                globalHotKey.shotProcess(this.enterFrame, this.snArea, this.textArea);
             } catch (AWTException e1) {
                 snArea.setText("截图未能启动");
             }

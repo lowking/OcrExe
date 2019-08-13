@@ -48,7 +48,6 @@ public class OcrUtil {
             try {
                 result = instance.doOCR(images.getBufferedImg()).trim();
                 ClipBoardUtil.setSysClipboardText(result);
-                snArea.setText(getWarpString(snArea, result));
             } catch (TesseractException e1) {
                 e1.printStackTrace();
                 snArea.setText("识别错误!");

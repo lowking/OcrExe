@@ -38,6 +38,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 import main.java.EnterFrame;
 import main.java.util.ClipBoardUtil;
@@ -71,6 +72,7 @@ public class GlobalHotKey implements HotkeyListener {
     private static final int DRAG_BOTTOMRIGHT = 9;
     private JLabel snArea;
     private EnterFrame enterFrame;
+    private JTextArea textArea;
 
     public GlobalHotKey() {
     }
@@ -111,9 +113,10 @@ public class GlobalHotKey implements HotkeyListener {
     private BufferedImage bi;
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-    public void shotProcess(EnterFrame enterFrame, JLabel snArea) throws AWTException {
+    public void shotProcess(EnterFrame enterFrame, JLabel snArea, JTextArea textArea) throws AWTException {
         this.snArea = snArea;
         this.enterFrame = enterFrame;
+        this.textArea = textArea;
         jf = new JFrame();
         jf.setUndecorated(true);
         jf.setBounds(0, 0, screenSize.width, screenSize.height);
@@ -264,9 +267,9 @@ public class GlobalHotKey implements HotkeyListener {
             images = new Images((new ImageIcon(clipArea())).getImage());
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(images, null);
             text = OcrUtil.showOcrResultForImg(images, snArea);
+
             if (text.toUpperCase().startsWith("QR") && text.length() > 2) {
                 //显示识别出来的文字生成的二维码
-                getQrCode(text);
                 //去除空格之类的
                 text = StringUtil.replaceBlank(text).substring(2);
                 ImageIcon icon = new ImageIcon(getQrCode(text));
@@ -275,6 +278,8 @@ public class GlobalHotKey implements HotkeyListener {
                 snArea.setIcon(icon);
                 snArea.setText("");
                 snArea.setBounds(0, 53, 280, 280);
+                textArea.setText(text);
+                textArea.setCaretPosition(0);
                 //识别成功置顶窗口
                 enterFrame.setAlwaysOnTop(true);
                 enterFrame.setAlwaysOnTop(false);
@@ -282,11 +287,13 @@ public class GlobalHotKey implements HotkeyListener {
                 //如果图片是二维码,复制其内容
                 try {
                     text = QrCodeUtil.getString(images.getBufferedImg());
+                    textArea.setText(text);
                     ClipBoardUtil.setSysClipboardText(text);
-                    snArea.setText(getWarpString(snArea, text));
-                    snArea.setIcon(null);
+                    //snArea.setText(getWarpString(snArea, text));
+                    //snArea.setIcon(null);
                 } catch (NotFoundException ignored) {
                     snArea.setIcon(null);
+                    snArea.setText(getWarpString(snArea, text));
                 }
             }
         } catch (IllegalArgumentException e1) {

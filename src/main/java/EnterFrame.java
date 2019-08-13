@@ -1,15 +1,33 @@
 package main.java;
 
+import static main.java.util.QrCodeUtil.getQrCode;
+
 import ch.randelshofer.quaqua.QuaquaManager;
 import com.alee.laf.WebLookAndFeel;
+import com.google.zxing.WriterException;
 import com.melloware.jintellitype.HotkeyListener;
 import com.melloware.jintellitype.JIntellitype;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Image;
+import java.util.Timer;
+import java.util.TimerTask;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.WindowConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import main.java.actions.DoOcrAction;
 import main.java.actions.DoSelectFileAction;
 import main.java.util.OcrUtil;
-
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * @Author: htc
@@ -87,25 +105,91 @@ public class EnterFrame extends JFrame implements HotkeyListener {
             }
         }
 
+        //添加文本框
+        JTextArea textArea = new JTextArea("", 2, 32);
+        add(textArea);
+        textArea.setBounds(100, 100, 260, 45);
+        //激活自动换行功能
+        textArea.setLineWrap(true);
+        // 激活断行不断字功能
+        textArea.setWrapStyleWord(true);
+        JPanel panelOutput;
+        panelOutput = new JPanel();
+        panelOutput.add(new JScrollPane(textArea));
+        add(panelOutput);
+        panelOutput.setBounds(0, 0, 280, 53);
+        //监听内容变化
+        textArea.getDocument().addDocumentListener(new DocumentListener() {
+            Timer timer = null;
+
+            private void createQrCode() {
+                try {
+                    String text = textArea.getText();
+                    if (text == null || text.length() <= 0) {
+                        return;
+                    }
+                    ImageIcon icon = new ImageIcon(getQrCode(text));
+                    icon = new ImageIcon(
+                            icon.getImage().getScaledInstance(300, 300, Image.SCALE_DEFAULT));
+                    snArea.setIcon(icon);
+                    snArea.setText("");
+                } catch (WriterException ignored) {
+                }
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if (timer != null) {
+                    timer.cancel();
+                }
+                timer = new Timer();
+                TimerTask task = new TimerTask() {
+                    @Override
+                    public void run() {
+                        createQrCode();
+                        timer.cancel();
+                    }
+                };
+                timer.schedule(task, 500, 500);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if (timer != null) {
+                    timer.cancel();
+                }
+                timer = new Timer();
+                TimerTask task = new TimerTask() {
+                    @Override
+                    public void run() {
+                        createQrCode();
+                        timer.cancel();
+                    }
+                };
+                timer.schedule(task, 500, 500);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+            }
+        });
+
         //添加识别按钮
         JButton doOcrBtn = new JButton("识别并复制");
-        add(doOcrBtn);
         doOcrBtn.setBounds(10, 10, 100, 45);
 
         //添加文件选择器按钮
         JButton doSelectFile = new JButton("选择");
-        add(doSelectFile);
         doSelectFile.setBounds(120, 10, 70, 45);
 
         //添加文件选择器按钮
         cutScreenBtn = new JButton("截图");
-        add(cutScreenBtn);
         cutScreenBtn.setBounds(200, 10, 70, 45);
 
         //按钮添加点击事件
         doOcrBtn.addActionListener(new DoOcrAction(snArea));
         doSelectFile.addActionListener(new DoSelectFileAction(this, snArea));
-        cutScreenBtn.addActionListener(new ScreenShot.ShotE(this, snArea));
+        cutScreenBtn.addActionListener(new ScreenShot.ShotE(this, snArea, textArea));
 
         //显示窗口
         setVisible(true);
