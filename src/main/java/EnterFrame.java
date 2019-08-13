@@ -40,11 +40,13 @@ public class EnterFrame extends JFrame implements HotkeyListener {
     private JButton cutScreenBtn;
 
     EnterFrame(String[] args) {
+        //默认文本框一行字符
+        int columns = 32;
         getContentPane().setBackground(Color.WHITE);
         //设置窗口大小
         setSize(295, 370);
         //设置标题
-        setTitle("单号识别");
+        setTitle("");
         ImageIcon imageIcon = new ImageIcon("src/main/resources/icon2.jpg");
         //设置图片
         setIconImage(imageIcon.getImage());
@@ -56,7 +58,7 @@ public class EnterFrame extends JFrame implements HotkeyListener {
         //添加label显示文本
         JLabel snArea = new JLabel("");
         add(snArea);
-        snArea.setBounds(0, 53, 280, 280);
+        snArea.setBounds(0, 55, 280, 280);
         snArea.setFont(new Font("",Font.PLAIN,18));
         snArea.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -66,15 +68,19 @@ public class EnterFrame extends JFrame implements HotkeyListener {
             if (args.length > 0) {
                 switch (args[0]) {
                     case "mac":
+                        columns = 22;
                         theme = QuaquaManager.getLookAndFeelClassName();
                         break;
                     case "metal":
+                        columns = 23;
                         theme = "javax.swing.plaf.metal.MetalLookAndFeel";
                         break;
                     case "nimbus":
+                        columns = 22;
                         theme = "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel";
                         break;
                     case "weblaf":
+                        columns = 44;
                         theme = WebLookAndFeel.class.getCanonicalName();
                         break;
                     case "beautyeye":
@@ -106,7 +112,7 @@ public class EnterFrame extends JFrame implements HotkeyListener {
         }
 
         //添加文本框
-        JTextArea textArea = new JTextArea("", 2, 32);
+        JTextArea textArea = new JTextArea("", 2, columns);
         add(textArea);
         textArea.setBounds(100, 100, 260, 45);
         //激活自动换行功能
@@ -117,7 +123,8 @@ public class EnterFrame extends JFrame implements HotkeyListener {
         panelOutput = new JPanel();
         panelOutput.add(new JScrollPane(textArea));
         add(panelOutput);
-        panelOutput.setBounds(0, 0, 280, 53);
+        panelOutput.setBounds(0, 0, 280, 55);
+        panelOutput.setBackground(Color.white);
         //监听内容变化
         textArea.getDocument().addDocumentListener(new DocumentListener() {
             Timer timer = null;

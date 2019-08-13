@@ -277,7 +277,6 @@ public class GlobalHotKey implements HotkeyListener {
                         icon.getImage().getScaledInstance(300, 300, Image.SCALE_DEFAULT));
                 snArea.setIcon(icon);
                 snArea.setText("");
-                snArea.setBounds(0, 53, 280, 280);
                 textArea.setText(text);
                 textArea.setCaretPosition(0);
                 //识别成功置顶窗口
