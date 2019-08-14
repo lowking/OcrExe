@@ -10,6 +10,7 @@ import com.melloware.jintellitype.JIntellitype;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.ImageIcon;
@@ -140,7 +141,7 @@ public class EnterFrame extends JFrame implements HotkeyListener {
                             icon.getImage().getScaledInstance(300, 300, Image.SCALE_DEFAULT));
                     snArea.setIcon(icon);
                     snArea.setText("");
-                } catch (WriterException ignored) {
+                } catch (WriterException | IOException ignored) {
                 }
             }
 
