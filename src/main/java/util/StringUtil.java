@@ -43,17 +43,22 @@ public class StringUtil {
         StringBuffer builder = new StringBuffer("<html>");
         char[] chars = str.toCharArray();
         FontMetrics fontMetrics = snArea.getFontMetrics(snArea.getFont());
-        for (int beginIndex = 0, limit = 1;; limit++) {
-            if (fontMetrics.charsWidth(chars, beginIndex, limit) < snArea.getWidth()) {
-                if (beginIndex + limit < chars.length) {
-                    continue;
+        for (int beginIndex = 0, limit = 1;beginIndex < chars.length; limit++) {
+            try {
+                if (fontMetrics.charsWidth(chars, beginIndex, limit) < snArea.getWidth()) {
+                    if (beginIndex + limit < chars.length) {
+                        continue;
+                    }
+                    builder.append(chars, beginIndex, limit);
+                    break;
                 }
-                builder.append(chars, beginIndex, limit);
+                builder.append(chars, beginIndex, limit - 1).append("<br/>");
+                beginIndex += limit - 1;
+                limit = 1;
+            } catch (IndexOutOfBoundsException e) {
+                builder.append(chars, beginIndex, chars.length - beginIndex);
                 break;
             }
-            builder.append(chars, beginIndex, limit - 1).append("<br/>");
-            beginIndex += limit - 1;
-            limit = 1;
         }
         builder.append("</html>");
         return builder.toString();
@@ -64,6 +69,6 @@ public class StringUtil {
         snArea.setBounds(0, 53, 280, 280);
         snArea.setFont(new Font("",Font.PLAIN,18));
         snArea.setHorizontalAlignment(SwingConstants.CENTER);
-        System.out.println(getWarpString(new JLabel(), "werwerwerwerwerwerwerwerwerwerwerwerwerwerwerwerwerwer"));
+        System.out.println(getWarpString(new JLabel(), "4200000399201908137880019422"));
     }
 }

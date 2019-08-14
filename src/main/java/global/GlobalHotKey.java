@@ -299,7 +299,11 @@ public class GlobalHotKey implements HotkeyListener {
             snArea.setText(text);
         } catch (Exception e) {
             snArea.setIcon(null);
-            snArea.setText("截屏区域太小了");
+            if (text != null && text.length() > 0) {
+                snArea.setText(text);
+            } else {
+                snArea.setText("截屏区域太小了");
+            }
         }
 
         clean();
