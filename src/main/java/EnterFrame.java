@@ -48,7 +48,7 @@ public class EnterFrame extends JFrame implements HotkeyListener {
         setSize(295, 370);
         //设置标题
         setTitle("");
-        ImageIcon imageIcon = new ImageIcon("src/main/resources/icon2.jpg");
+        ImageIcon imageIcon = new ImageIcon("src/main/resources/favicon.png");
         //设置图片
         setIconImage(imageIcon.getImage());
         //设置里面控件的布局方式
