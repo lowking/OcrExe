@@ -7,6 +7,7 @@ import com.alee.laf.WebLookAndFeel;
 import com.google.zxing.WriterException;
 import com.melloware.jintellitype.HotkeyListener;
 import com.melloware.jintellitype.JIntellitype;
+import com.melloware.jintellitype.JIntellitypeException;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -203,7 +204,7 @@ public class EnterFrame extends JFrame implements HotkeyListener {
         setVisible(true);
 
         //注册全局快捷键
-        initHotkey();
+        initHotkey(textArea);
 
         //初始化ocr实例
         OcrUtil.init();
@@ -223,8 +224,31 @@ public class EnterFrame extends JFrame implements HotkeyListener {
         }
     }
 
-    private void initHotkey() {
-        JIntellitype.getInstance().registerHotKey(shotHotKey, JIntellitype.MOD_CONTROL + JIntellitype.MOD_ALT, 69);
+    private void initHotkey(JTextArea textArea) {
+        try {
+            JIntellitype.getInstance().registerHotKey(shotHotKey, JIntellitype.MOD_CONTROL + JIntellitype.MOD_ALT, 69);
+            textArea.setText(
+                    ("".equals(textArea.getText()) ?
+                            textArea.getText() + "Ctrl+Alt+E快捷键注册成功" : textArea.getText() + "\nCtrl+Alt+E快捷键注册成功")
+            );
+        } catch (JIntellitypeException e) {
+            textArea.setText(
+                    ("".equals(textArea.getText()) ?
+                            textArea.getText() + "Ctrl+Alt+E快捷键注册失败" : textArea.getText() + "\nCtrl+Alt+E快捷键注册失败")
+            );
+        }
+        try {
+            JIntellitype.getInstance().registerHotKey(shotHotKey, JIntellitype.MOD_ALT, 90);
+            textArea.setText(
+                    ("".equals(textArea.getText()) ?
+                            textArea.getText() + "Alt+Z快捷键注册成功" : textArea.getText() + "\nAlt+Z快捷键注册成功")
+            );
+        } catch (JIntellitypeException e) {
+            textArea.setText(
+                    ("".equals(textArea.getText()) ?
+                            textArea.getText() + "Alt+Z快捷键注册失败" : textArea.getText() + "\nAlt+Z快捷键注册失败")
+            );
+        }
         JIntellitype.getInstance().addHotKeyListener(this);
     }
 }
