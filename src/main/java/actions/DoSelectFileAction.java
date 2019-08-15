@@ -19,8 +19,8 @@ public class DoSelectFileAction extends JFrame implements ActionListener {
     private final JLabel snArea;
     private String defaultDirectory = "c:/";
 
-    public DoSelectFileAction(EnterFrame EnterFrame, JLabel snArea) {
-        this.EnterFrame = EnterFrame;
+    public DoSelectFileAction(EnterFrame enterFrame, JLabel snArea) {
+        this.EnterFrame = enterFrame;
         this.snArea = snArea;
     }
 

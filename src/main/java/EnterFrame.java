@@ -36,9 +36,11 @@ import main.java.util.OcrUtil;
  * @Date: 2019/8/7
  */
 public class EnterFrame extends JFrame implements HotkeyListener {
-    //防止重复截图。
+    /**
+     * 防止重复截图
+     */
     public static volatile boolean shotBusy = false;
-    private static final int shotHotKey = 88;
+    private static final int SHOT_HOT_KEY = 88;
     private JButton cutScreenBtn;
 
     EnterFrame(String[] args) {
@@ -218,7 +220,7 @@ public class EnterFrame extends JFrame implements HotkeyListener {
     @Override
     public void onHotKey(int key) {
         //ctrl+alt+e
-        if (88 == key && !shotBusy) {
+        if (SHOT_HOT_KEY == key && !shotBusy) {
             shotBusy = true;
             cutScreenBtn.doClick();
         }
@@ -226,7 +228,7 @@ public class EnterFrame extends JFrame implements HotkeyListener {
 
     private void initHotkey(JTextArea textArea) {
         try {
-            JIntellitype.getInstance().registerHotKey(shotHotKey, JIntellitype.MOD_CONTROL + JIntellitype.MOD_ALT, 69);
+            JIntellitype.getInstance().registerHotKey(SHOT_HOT_KEY, JIntellitype.MOD_CONTROL + JIntellitype.MOD_ALT, 69);
             textArea.setText(
                     ("".equals(textArea.getText()) ?
                             textArea.getText() + "Ctrl+Alt+E快捷键注册成功" : textArea.getText() + "\nCtrl+Alt+E快捷键注册成功")
@@ -238,7 +240,7 @@ public class EnterFrame extends JFrame implements HotkeyListener {
             );
         }
         try {
-            JIntellitype.getInstance().registerHotKey(shotHotKey, JIntellitype.MOD_ALT, 90);
+            JIntellitype.getInstance().registerHotKey(SHOT_HOT_KEY, JIntellitype.MOD_ALT, 90);
             textArea.setText(
                     ("".equals(textArea.getText()) ?
                             textArea.getText() + "Alt+Z快捷键注册成功" : textArea.getText() + "\nAlt+Z快捷键注册成功")

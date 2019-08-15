@@ -8,6 +8,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * @Author: htc
+ * @Date: 2019/8/7
+ */
 public class ScreenShot {
     private static JFrame jf;
 
@@ -56,7 +60,7 @@ public class ScreenShot {
         private void createTray() {
             PopupMenu pm = new PopupMenu();
             MenuItem mi = new MenuItem("exit");
-            mi.addActionListener(e -> {JIntellitype.getInstance().unregisterHotKey(GlobalHotKey.shotHotKey);System.exit(0);});
+            mi.addActionListener(e -> {JIntellitype.getInstance().unregisterHotKey(GlobalHotKey.SHOT_HOT_KEY);System.exit(0);});
             pm.add(mi);
             ImageIcon img = new ImageIcon(ScreenShot.class.getResource("trayIcon.png"));
             TrayIcon ti = new TrayIcon(img.getImage(), "screenShot", pm);

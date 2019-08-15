@@ -46,18 +46,25 @@ import main.java.util.OcrUtil;
 import main.java.util.QrCodeUtil;
 import main.java.util.StringUtil;
 
+/**
+ * @Author: htc
+ * @Date: 2019/8/7
+ */
 public class GlobalHotKey implements HotkeyListener {
-    public static final int shotHotKey = 88;
-    //防止和全局热键冲突。
+    public static final int SHOT_HOT_KEY = 88;
+    /**
+     * 防止和全局热键冲突
+     */
     private volatile boolean enterBusy = false;
-    //第一次拖拽完成后，需要进行处理，这时候需要重新利用click,drag和release函数。
+
+    /**
+     * 第一次拖拽完成后，需要进行处理，这时候需要重新利用click,drag和release函数。
+     */
     private volatile boolean isProcess = false;
     /**
-     * 拖拽参数
-     **/
-    //边界拉伸范围
+     * 边界拉伸范围
+     */
     private static final int BREADTH = 7;
-    //边界拉伸范围
     private static final int BREADTH2 = 14;
     private int dragType;
     private static final int DRAG_NONE = 0;
@@ -125,11 +132,7 @@ public class GlobalHotKey implements HotkeyListener {
         jp.setOpaque(false);
         jp.setLayout(null);
         Robot rb;
-        try {
-            rb = new Robot();
-        } catch (AWTException e) {
-            throw e;
-        }
+        rb = new Robot();
         bi = rb.createScreenCapture(new Rectangle(screenSize));
         drawMouse(bi);
         img = new ImageIcon(bi);
@@ -210,7 +213,7 @@ public class GlobalHotKey implements HotkeyListener {
 
         Point myStart = new Point(0, 0);
 
-        public void correctMyStart() {
+        void correctMyStart() {
             if ((start.x <= end.x) && (start.y <= end.y)) {
                 myStart.x = start.x;
                 myStart.y = start.y;
@@ -562,8 +565,8 @@ public class GlobalHotKey implements HotkeyListener {
     }
 
     public void initHotkey() {
-        // JIntellitype.getInstance().registerHotKey(shotHotKey, JIntellitype.MOD_CONTROL + JIntellitype.MOD_ALT, (int)(ScreenShot.jtf.getText().toCharArray()[0]));
-        JIntellitype.getInstance().registerHotKey(shotHotKey, JIntellitype.MOD_CONTROL + JIntellitype.MOD_ALT,
+        // JIntellitype.getInstance().registerHotKey(SHOT_HOT_KEY, JIntellitype.MOD_CONTROL + JIntellitype.MOD_ALT, (int)(ScreenShot.jtf.getText().toCharArray()[0]));
+        JIntellitype.getInstance().registerHotKey(SHOT_HOT_KEY, JIntellitype.MOD_CONTROL + JIntellitype.MOD_ALT,
                 101);
         JIntellitype.getInstance().addHotKeyListener(this);
     }

@@ -11,10 +11,7 @@ public class PicFilter extends FileFilter {
 
     @Override
     public boolean accept(File f) {
-        if (f.isDirectory()) {
-            return true;
-        }
-        return f.getName().endsWith(".jpg");
+        return f.isDirectory() || f.getName().endsWith(".jpg");
     }
 
     @Override

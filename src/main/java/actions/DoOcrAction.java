@@ -1,7 +1,5 @@
 package main.java.actions;
 
-import static main.java.util.OcrUtil.instance;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -14,7 +12,7 @@ import main.java.util.OcrUtil;
  * @Date: 2019/8/7
  */
 public class DoOcrAction extends JFrame implements ActionListener {
-    JLabel snArea;
+    private JLabel snArea;
 
     public DoOcrAction(JLabel snArea) {
         this.snArea = snArea;
