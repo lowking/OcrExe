@@ -44,6 +44,8 @@ public class EnterFrame extends JFrame implements HotkeyListener {
     public static volatile boolean shotBusy = false;
     private static final int SHOT_HOT_KEY = 88;
     private JButton cutScreenBtn;
+    private static ImageIcon imageIcon = new ImageIcon("src/main/resources/favicon.png");
+    private static ImageIcon imageIcon_red = new ImageIcon("src/main/resources/favicon-red.png");
 
     EnterFrame(String[] args) {
         //默认文本框一行字符
@@ -54,7 +56,6 @@ public class EnterFrame extends JFrame implements HotkeyListener {
         setResizable(false);
         //设置标题
         setTitle("");
-        ImageIcon imageIcon = new ImageIcon("src/main/resources/favicon.png");
         //设置图片
         setIconImage(imageIcon.getImage());
         //设置里面控件的布局方式
@@ -196,6 +197,8 @@ public class EnterFrame extends JFrame implements HotkeyListener {
         cutScreenBtn.setBounds(200, 10, 70, 45);
 
         //按钮添加点击事件
+        textArea.setText("右键点击下面二维码截图");
+        textArea.setText(textArea.getText() + "\n中间(滚轮)点击下面二维码置顶窗口");
         snArea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -205,6 +208,11 @@ public class EnterFrame extends JFrame implements HotkeyListener {
                 } else if (e.getButton() == 2) {
                     //中间点击窗口切换置顶
                     EnterFrame.super.setAlwaysOnTop(!EnterFrame.super.isAlwaysOnTop());
+                    if (EnterFrame.super.isAlwaysOnTop()) {
+                        EnterFrame.super.setIconImage(imageIcon_red.getImage());
+                    } else {
+                        EnterFrame.super.setIconImage(imageIcon.getImage());
+                    }
                 }
             }
         });
