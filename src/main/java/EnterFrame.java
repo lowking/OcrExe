@@ -11,6 +11,8 @@ import com.melloware.jintellitype.JIntellitypeException;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -198,6 +200,15 @@ public class EnterFrame extends JFrame implements HotkeyListener {
         cutScreenBtn.setBounds(200, 10, 70, 45);
 
         //按钮添加点击事件
+        snArea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == 3) {
+                    //右键点击触发截图
+                    cutScreenBtn.doClick();
+                }
+            }
+        });
         doOcrBtn.addActionListener(new DoOcrAction(snArea));
         doSelectFile.addActionListener(new DoSelectFileAction(this, snArea));
         cutScreenBtn.addActionListener(new ScreenShot.ShotE(this, snArea, textArea));
