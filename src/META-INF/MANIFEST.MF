@@ -1,3 +1,8 @@
 Manifest-Version: 1.0
+Class-Path: jna-5.2.0.jar core-3.4.0.jar javase-3.4.0.jar quaqua-7.3.4
+ .jar lept4j-1.11.0.jar commons-io-2.5.jar slf4j-api-1.7.25.jar jintel
+ litype-1.3.9.jar jna-platform-5.2.0.jar jul-to-slf4j-1.7.25.jar tess4
+ j-4.4.0-SNAPSHOT.jar jai-imageio-core-1.4.0.jar SwingSets3(BeautyEyeL
+ NFDemo).jar weblaf-demo-1.2.9-jar-with-dependencies.jar
 Main-Class: main.java.MainFrame
 

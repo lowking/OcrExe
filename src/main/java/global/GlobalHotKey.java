@@ -283,8 +283,10 @@ public class GlobalHotKey implements HotkeyListener {
                 textArea.setText(text);
                 textArea.setCaretPosition(0);
                 //识别成功置顶窗口
-                enterFrame.setAlwaysOnTop(true);
-                enterFrame.setAlwaysOnTop(false);
+                if (!enterFrame.isAlwaysOnTop()) {
+                    enterFrame.setAlwaysOnTop(true);
+                    enterFrame.setAlwaysOnTop(false);
+                }
             } else {
                 //如果图片是二维码,复制其内容
                 try {
