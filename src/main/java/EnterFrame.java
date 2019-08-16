@@ -206,6 +206,9 @@ public class EnterFrame extends JFrame implements HotkeyListener {
                 if (e.getButton() == 3) {
                     //右键点击触发截图
                     cutScreenBtn.doClick();
+                } else if (e.getButton() == 2) {
+                    //中间点击窗口切换置顶
+                    EnterFrame.super.setAlwaysOnTop(!EnterFrame.super.isAlwaysOnTop());
                 }
             }
         });
