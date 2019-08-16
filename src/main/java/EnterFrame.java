@@ -8,6 +8,7 @@ import com.google.zxing.WriterException;
 import com.melloware.jintellitype.HotkeyListener;
 import com.melloware.jintellitype.JIntellitype;
 import com.melloware.jintellitype.JIntellitypeException;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -21,7 +22,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
@@ -50,7 +50,7 @@ public class EnterFrame extends JFrame implements HotkeyListener {
         int columns = 32;
         getContentPane().setBackground(Color.WHITE);
         //设置窗口大小
-        setSize(295, 370);
+        setSize(296, 384);
         //设置标题
         setTitle("");
         ImageIcon imageIcon = new ImageIcon("src/main/resources/favicon.png");
@@ -63,10 +63,10 @@ public class EnterFrame extends JFrame implements HotkeyListener {
 
         //添加label显示文本
         JLabel snArea = new JLabel("");
-        add(snArea);
-        snArea.setBounds(0, 55, 280, 280);
+        snArea.setBounds(0, 65, 280, 280);
         snArea.setFont(new Font("",Font.PLAIN,18));
         snArea.setHorizontalAlignment(SwingConstants.CENTER);
+        add(snArea);
 
         try {
             String theme = null;
@@ -119,18 +119,13 @@ public class EnterFrame extends JFrame implements HotkeyListener {
 
         //添加文本框
         JTextArea textArea = new JTextArea("", 2, columns);
-        add(textArea);
-        textArea.setBounds(100, 100, 260, 45);
         //激活自动换行功能
         textArea.setLineWrap(true);
         // 激活断行不断字功能
         textArea.setWrapStyleWord(true);
-        JPanel panelOutput;
-        panelOutput = new JPanel();
-        panelOutput.add(new JScrollPane(textArea));
-        add(panelOutput);
-        panelOutput.setBounds(0, 0, 280, 55);
-        panelOutput.setBackground(Color.white);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setBounds(5, 5, 270, 55);
+        add(scrollPane, BorderLayout.CENTER);
         //监听内容变化
         textArea.getDocument().addDocumentListener(new DocumentListener() {
             Timer timer = null;
