@@ -50,7 +50,8 @@ public class EnterFrame extends JFrame implements HotkeyListener {
         int columns = 32;
         getContentPane().setBackground(Color.WHITE);
         //设置窗口大小
-        setSize(296, 384);
+        setSize(286, 374);
+        setResizable(false);
         //设置标题
         setTitle("");
         ImageIcon imageIcon = new ImageIcon("src/main/resources/favicon.png");
