@@ -8,12 +8,18 @@ import com.google.zxing.WriterException;
 import com.melloware.jintellitype.HotkeyListener;
 import com.melloware.jintellitype.JIntellitype;
 import com.melloware.jintellitype.JIntellitypeException;
+import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.Image;
+import java.awt.MenuItem;
 import java.awt.Point;
+import java.awt.PopupMenu;
 import java.awt.Rectangle;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -51,10 +57,13 @@ public class EnterFrame extends JFrame implements HotkeyListener, ActionListener
     private JButton cutScreenBtn;
     private static ImageIcon imageIcon = new ImageIcon("src/main/resources/favicon.png");
     private static ImageIcon imageIcon_red = new ImageIcon("src/main/resources/favicon-red.png");
+    private static ImageIcon imageIcon16x16 = new ImageIcon("src/main/resources/favicon16x16.png");
     private static JFrame jFrame;
 
     EnterFrame(String[] args) {
         jFrame = this;
+        //隐藏最大化最小化按钮,但是窗体主题改变了
+        //getRootPane().setWindowDecorationStyle(JRootPane.PLAIN_DIALOG);
         //默认文本框一行字符
         int columns = 32;
         getContentPane().setBackground(Color.WHITE);
@@ -215,12 +224,7 @@ public class EnterFrame extends JFrame implements HotkeyListener, ActionListener
                     cutScreenBtn.doClick();
                 } else if (e.getButton() == 2) {
                     //中间点击窗口切换置顶
-                    EnterFrame.super.setAlwaysOnTop(!EnterFrame.super.isAlwaysOnTop());
-                    if (EnterFrame.super.isAlwaysOnTop()) {
-                        EnterFrame.super.setIconImage(imageIcon_red.getImage());
-                    } else {
-                        EnterFrame.super.setIconImage(imageIcon.getImage());
-                    }
+                    switchTop();
                 }
             }
         });
@@ -228,21 +232,30 @@ public class EnterFrame extends JFrame implements HotkeyListener, ActionListener
         doSelectFile.addActionListener(new DoSelectFileAction(this, snArea));
         cutScreenBtn.addActionListener(new ScreenShot.ShotE(this, snArea, textArea));
 
-        //显示窗口
-        setVisible(true);
-
         //注册全局快捷键
         initHotkey(textArea);
 
         //初始化ocr实例
         OcrUtil.init();
+
+        //显示窗口
+        setVisible(true);
         
-        //初始化参数
-        //这个是强制缩放到与组件(Label)大小相同
-        //icon=new ImageIcon(icon.getImage().getScaledInstance(getWidth(), getHeight()-25, Image.SCALE_DEFAULT));
-        //这个是按等比缩放
         timer.start();
         moveFrame();
+        createTray();
+    }
+
+    /**
+     * 切换置顶窗口
+     */
+    private void switchTop() {
+        jFrame.setAlwaysOnTop(!jFrame.isAlwaysOnTop());
+        if (jFrame.isAlwaysOnTop()) {
+            jFrame.setIconImage(imageIcon_red.getImage());
+        } else {
+            jFrame.setIconImage(imageIcon.getImage());
+        }
     }
 
     @Override
@@ -317,6 +330,8 @@ public class EnterFrame extends JFrame implements HotkeyListener, ActionListener
     private static boolean isDraging = false;
     @Override
     public void actionPerformed(ActionEvent e) {
+        //变相隐藏最小化按钮
+        jFrame.setState(Frame.NORMAL);
         left = jFrame.getLocationOnScreen().x;
         top = jFrame.getLocationOnScreen().y;
         width = jFrame.getWidth();
@@ -405,5 +420,29 @@ public class EnterFrame extends JFrame implements HotkeyListener, ActionListener
                 }
             }
         });
+    }
+
+    private void createTray() {
+        PopupMenu pm = new PopupMenu();
+        //窗口置顶
+        MenuItem switchTop = new MenuItem("\u5207\u6362\u7a97\u53e3\u7f6e\u9876");
+        switchTop.addActionListener(e -> {
+            switchTop();
+        });
+        pm.add(switchTop);
+        //退出
+        MenuItem mi = new MenuItem("\u9000\u51fa");
+        mi.addActionListener(e -> {
+            JIntellitype.getInstance().unregisterHotKey(SHOT_HOT_KEY);
+            System.exit(0);
+        });
+        pm.add(mi);
+        TrayIcon ti = new TrayIcon(imageIcon16x16.getImage(), "ocr", pm);
+        ti.addActionListener(e -> jFrame.setVisible(true));
+        try {
+            SystemTray.getSystemTray().add(ti);
+        } catch (AWTException e1) {
+            e1.printStackTrace();
+        }
     }
 }

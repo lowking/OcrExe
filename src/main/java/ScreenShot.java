@@ -1,26 +1,20 @@
 package main.java;
 
-import com.melloware.jintellitype.JIntellitype;
-import main.java.global.GlobalHotKey;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.AWTException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import main.java.global.GlobalHotKey;
 
 /**
  * @Author: htc
  * @Date: 2019/8/7
  */
 public class ScreenShot {
-    private static JFrame jf;
 
     public static void main(String[] args) {
         new ScreenShot();
-    }
-
-    public static void setJf(JFrame jf) {
-        ScreenShot.jf = jf;
     }
 
     public static class ShotE implements ActionListener {
@@ -55,21 +49,6 @@ public class ScreenShot {
         private void setHotKey() {
             key = new GlobalHotKey();
             key.initHotkey();
-        }
-
-        private void createTray() {
-            PopupMenu pm = new PopupMenu();
-            MenuItem mi = new MenuItem("exit");
-            mi.addActionListener(e -> {JIntellitype.getInstance().unregisterHotKey(GlobalHotKey.SHOT_HOT_KEY);System.exit(0);});
-            pm.add(mi);
-            ImageIcon img = new ImageIcon(ScreenShot.class.getResource("trayIcon.png"));
-            TrayIcon ti = new TrayIcon(img.getImage(), "screenShot", pm);
-            ti.addActionListener(e -> jf.setVisible(true));
-            try {
-                SystemTray.getSystemTray().add(ti);
-            } catch (AWTException e1) {
-                e1.printStackTrace();
-            }
         }
     }
 }
