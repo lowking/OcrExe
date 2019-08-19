@@ -64,7 +64,7 @@ public class EnterFrame extends JFrame implements HotkeyListener, ActionListener
         //设置标题
         setTitle("");
         //设置图片
-        setIconImage(imageIcon.getImage());
+        setIconImage(imageIcon_red.getImage());
         //设置里面控件的布局方式
         this.setLayout(null);
         this.setAlwaysOnTop(true);
@@ -206,7 +206,7 @@ public class EnterFrame extends JFrame implements HotkeyListener, ActionListener
 
         //按钮添加点击事件
         textArea.setText("右键点击下面二维码截图");
-        textArea.setText(textArea.getText() + "\n中间(滚轮)点击下面二维码置顶窗口");
+        textArea.setText(textArea.getText() + "\n中键(滚轮)点击二维码置顶窗口(默认置顶)");
         snArea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
