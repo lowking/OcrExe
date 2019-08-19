@@ -12,8 +12,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -37,7 +42,7 @@ import main.java.util.OcrUtil;
  * @Author: htc
  * @Date: 2019/8/7
  */
-public class EnterFrame extends JFrame implements HotkeyListener {
+public class EnterFrame extends JFrame implements HotkeyListener, ActionListener {
     /**
      * 防止重复截图
      */
@@ -46,8 +51,10 @@ public class EnterFrame extends JFrame implements HotkeyListener {
     private JButton cutScreenBtn;
     private static ImageIcon imageIcon = new ImageIcon("src/main/resources/favicon.png");
     private static ImageIcon imageIcon_red = new ImageIcon("src/main/resources/favicon-red.png");
+    private static JFrame jFrame;
 
     EnterFrame(String[] args) {
+        jFrame = this;
         //默认文本框一行字符
         int columns = 32;
         getContentPane().setBackground(Color.WHITE);
@@ -60,6 +67,7 @@ public class EnterFrame extends JFrame implements HotkeyListener {
         setIconImage(imageIcon.getImage());
         //设置里面控件的布局方式
         this.setLayout(null);
+        this.setAlwaysOnTop(true);
         //设置点击关闭对出程序
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -233,6 +241,8 @@ public class EnterFrame extends JFrame implements HotkeyListener {
         //这个是强制缩放到与组件(Label)大小相同
         //icon=new ImageIcon(icon.getImage().getScaledInstance(getWidth(), getHeight()-25, Image.SCALE_DEFAULT));
         //这个是按等比缩放
+        timer.start();
+        moveFrame();
     }
 
     @Override
@@ -270,5 +280,130 @@ public class EnterFrame extends JFrame implements HotkeyListener {
             );
         }
         JIntellitype.getInstance().addHotKeyListener(this);
+    }
+
+
+    private static Rectangle rect;
+    /**
+     * 窗体离屏幕左边的距离
+     */
+    private static int left;
+    /**
+     * 窗体离屏幕右边的距离
+     */
+    private static int right;
+    /**
+     * 屏幕的宽度
+     */
+    private static int screenXX;
+    /**
+     * 窗体离屏幕顶部的距离
+     */
+    private static int top;
+    /**
+     * 窗体的宽
+     */
+    private static int width;
+    /**
+     * 窗体的高
+     */
+    private static int height;
+    /**
+     * 鼠标在窗体的位置
+     */
+    private static Point point;
+    private javax.swing.Timer timer = new javax.swing.Timer(10, this);
+    private static int xx, yy;
+    private static boolean isDraging = false;
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        left = jFrame.getLocationOnScreen().x;
+        top = jFrame.getLocationOnScreen().y;
+        width = jFrame.getWidth();
+        height = jFrame.getHeight();
+        screenXX = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
+        right = screenXX - left - width;
+        // 获取窗体的轮廓
+        rect = new Rectangle(0, 0, width, height);
+        // 获取鼠标在窗体的位置
+        point = jFrame.getMousePosition();
+        if (left < 0 && isPtInRect(rect, point)) {
+            //隐藏在左边，鼠标指到后显示窗体
+            jFrame.setLocation(0, top);
+        } else if (left > -5 && left < 5 && !(isPtInRect(rect, point))) {
+            //窗体移到左边便边缘隐藏到左边
+            jFrame.setLocation(left - width + 1, top);
+        } else if ((top < 0 && left < 0) && isPtInRect(rect, point)) {
+            //窗体在左上角
+            //窗口隐藏了，鼠标指到他，就显示出来
+            jFrame.setLocation(0, 0);
+        } else if ((top > -5 && top < 5) && (left > -5 && left < 5)
+                && !(isPtInRect(rect, point))) {
+            // 当窗体的上边框与屏幕的顶端的距离小于5，
+            // 并且鼠标不再窗体上将窗体隐藏到屏幕的顶端
+            jFrame.setLocation(left - width + 1, 1);
+        } else if ((top < 0) && isPtInRect(rect, point)) {
+            //窗口隐藏了，鼠标指到他，就显示出来
+            jFrame.setLocation(left, 0);
+        } else if (top > -5 && top < 5 && !(isPtInRect(rect, point))) {
+            // 当窗体的上边框与屏幕的顶端的距离小于5时，
+            // 并且鼠标不再窗体上将窗体隐藏到屏幕的顶端
+            jFrame.setLocation(left, 1 - height);
+        } else if (right < 0 && isPtInRect(rect, point)) {
+            //隐藏在右边，鼠标指到后显示
+            jFrame.setLocation(screenXX - width + 1, top);
+        } else if (right > -5 && right < 5 && !(isPtInRect(rect, point))) {
+            //窗体移到屏幕右边边缘隐藏到右边
+            jFrame.setLocation(screenXX - 1, top);
+        } else if (right < 0 && top < 0 && isPtInRect(rect, point)) {
+            //窗体在右上角
+            //隐藏在右边，鼠标指到后显示
+            jFrame.setLocation(screenXX - width + 1, 0);
+        } else if ((right > -5 && right < 5) && (top > -5 && top < 5)
+                && !(isPtInRect(rect, point))) {
+            //窗体移到屏幕右边边缘隐藏到右边
+            jFrame.setLocation(screenXX - 1, 1);
+        }
+    }
+
+    private boolean isPtInRect(Rectangle rect, Point point) {
+        if (rect != null && point != null) {
+            int x0 = rect.x;
+            int y0 = rect.y;
+            int x1 = rect.width;
+            int y1 = rect.height;
+            int x = point.x;
+            int y = point.y;
+            return x >= x0 && x < x1 && y >= y0 && y < y1;
+        }
+        return false;
+    }
+
+    private void moveFrame() {
+        jFrame.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                isDraging = true;
+                xx = e.getX();
+                yy = e.getY();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                isDraging = false;
+            }
+        });
+        jFrame.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (isDraging) {
+                    int left = jFrame.getLocation().x;
+                    int top = jFrame.getLocation().y;
+                    jFrame.setLocation(left + e.getX() - xx, top + e.getY()
+                            - yy);
+                    jFrame.repaint();
+                }
+            }
+        });
     }
 }
