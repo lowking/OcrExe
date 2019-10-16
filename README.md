@@ -1,6 +1,7 @@
 [![License](http://img.shields.io/:license-apache-blue.svg "2.0")](http://www.apache.org/licenses/LICENSE-2.0.html)
 [![JDK 1.8](https://img.shields.io/badge/JDK-1.8-green.svg "JDK 1.8")]()
 [![License](http://img.shields.io/:license-Tess4j-purple.svg "")](https://github.com/nguyenq/tess4j/blob/master/LICENSE)
+[![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 ## OcrExe
 - 使用开源的Tess4j实现简单的ocr文字识别
 
